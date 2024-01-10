@@ -1,6 +1,6 @@
-baseurl: /
+baseurl: https://adatatrip.netlify.app/
 languageCode: en-US
-title: A Hugo website
+title: a_data_trip
 theme: hugo-lithium
 googleAnalytics: ''
 disqusShortname: ''
@@ -15,9 +15,9 @@ menu:
     - name: About
       url: /about/
     - name: GitHub
-      url: https://github.com/rstudio/blogdown
+      url: https://github.com/alvaro20dam
     - name: Twitter
-      url: https://twitter.com/rstudio
+      url: https://twitter.com/alvarogonz
 params:
   MathJaxCDN: //cdnjs.cloudflare.com/ajax/libs
   MathJaxVersion: 2.7.5
