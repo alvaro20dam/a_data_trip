@@ -37,3 +37,20 @@ pie(
 ```
 
 ## Hello World
+
+```{r}
+summary(Orange)
+```
+
+## A plot
+
+```{r echo=FALSE}
+library(ggplot2)
+ggplot(Orange, aes(x = age, 
+                   y = circumference, 
+                   color = Tree)) +
+  geom_point() +
+  geom_line() +
+  guides(color = "none") +
+  theme_bw()
+```
