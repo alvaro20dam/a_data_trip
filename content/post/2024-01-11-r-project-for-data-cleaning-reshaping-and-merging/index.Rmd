@@ -1,0 +1,103 @@
+---
+title: R project for data cleaning, reshaping and merging
+author: Alvaro
+date: '2024-01-11'
+slug: r-project-for-data-cleaning-reshaping-and-merging
+categories:
+  - R
+tags:
+  - plot
+  - R Markdown
+---
+## Packages
+
+```{r loadPackgs, message=FALSE, warning=FALSE}
+library(dplyr)
+library(readr)
+library(lubridate)
+library(stringr)
+library(tidyr)
+library(ggplot2)
+billboard100 <- read.csv("charts.csv")
+```
+
+## Selecting
+
+```{r}
+music_df = billboard100 %>%
+  select(date:artist, weeks_popular='weeks.on.board')
+str(music_df)
+```
+
+
+## Fixed date format and artist column
+
+
+```{r dateArtistfix}
+music_df.cleaned =
+music_df %>%
+  mutate(date = ymd(date),
+        primary_artist = ifelse(str_detect(artist, 'Featuring'),
+                                str_match(artist, '(.*)\\sFeaturing')[,2],
+                                artist),
+        featured_artist = str_match(artist, 'Featuring\\s(.*)')[,2])
+  
+```
+
+## Using pivot_longer from tidyr
+
+```{r eval=FALSE}
+music_df.cleaned %>%
+  distinct(song, primary_artist, featured_artist) %>%
+  pivot_longer(2:3, names_to = "artist_type", values_to = "artist_name") %>%
+  filter(artist_name=="Drake") %>%
+  count(artist_type)
+```
+
+```{r eval=FALSE}
+music_df.cleaned %>%
+  filter(rank <= 3) %>%
+  select(date, rank, song) %>%
+  pivot_wider(names_from = "rank", values_from = "song")
+```
+
+```{r}
+mtv_data1 = read_csv("mtvArtists/10000-MTV-Music-Artists-page-1.csv")
+mtv_data2 = read_csv("mtvArtists/10000-MTV-Music-Artists-page-2.csv")
+mtv_data3 = read_csv("mtvArtists/10000-MTV-Music-Artists-page-3.csv")
+mtv_data4 = read_csv("mtvArtists/10000-MTV-Music-Artists-page-4.csv")
+mtv_data <- rbind(mtv_data1, mtv_data2, mtv_data3, mtv_data4)
+
+```
+
+```{r}
+head(mtv_data)
+```
+
+
+```{r}
+top5_genres =
+music_df.cleaned %>%
+  inner_join(mtv_data, by = c("primary_artist" = "name")) %>%
+  select(song, primary_artist, genre) %>%
+  filter(!is.na(genre)) %>%
+  distinct() %>%
+  count(genre) %>%
+  top_n(5) %>%
+  pull(genre)
+
+```
+
+
+```{r}
+music_df.cleaned %>%
+  inner_join(mtv_data, by = c("primary_artist" = "name")) %>%
+  mutate(date=floor_date(date, unit="year")) %>%
+  select(date, song, genre) %>%
+  filter(genre %in% top5_genres) %>%
+  count(date, genre) %>%
+  ggplot(aes(x=date,y=n,color=genre)) + geom_line()
+  
+```
+
+
