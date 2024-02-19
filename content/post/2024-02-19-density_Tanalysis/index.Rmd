@@ -1,0 +1,75 @@
+---
+title: "Density plot"
+author: "Alvaro Gonzalez"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+## Life Expectancy Analysis t-test with R
+
+Life expectancy is a measure that reflects the quality of life of a population. However, there are large differences between countries and regions of the world in this indicator. What factors explain these disparities? How can we compare the life expectancy of different groups statistically? In this paper, we will use the t-test method to analyze a worldwide life expectancy database[^1^][1].
+
+The t-test is a test that allows us to determine if there is a significant difference between the means of two independent samples. With this tool, we will be able to answer questions such as: Is there a significant difference between the life expectancy of men and women? Which regions have the highest and lowest life expectancy? How has life expectancy evolved in recent decades? These and other questions will be addressed in this work, which aims to be a work of Statistics Art.
+
+To perform a t-test, the following steps must be followed:
+
+- Define the null hypothesis (Ho) and the alternative hypothesis (Ha) before collecting the data. The null hypothesis usually states that there is no difference between the means of the two groups, while the alternative asserts the opposite.
+- Decide the level of significance (alpha or α). This is the risk you want to take of rejecting the null hypothesis when it is true. A value of 0.05 or 0.01 is usually chosen.
+- Calculate the t-statistic. This is a measure that indicates how far the means of the two groups deviate from the expected value under the null hypothesis. The formula for calculating the t varies depending on the type of t-test used (single sample, two independent samples, or two related samples).
+- Calculate degrees of freedom. These are the number of values that can vary freely in the calculation of t. The formula for calculating degrees of freedom also depends on the type of t-test used.
+- Set the critical value. This is the t-value needed to reject the null hypothesis at the chosen level of significance. It can be obtained by consulting a distribution table t or by using an online calculator.
+
+The mathematical formula for calculating the values of Student's t-table is as follows:
+
+To calculate the values of the Student's t-table, you can use the formula for the probability density function of the t-distribution of Student[1], which is:
+
+$f(t) = \frac{\Gamma(\frac{v + 1}2)}{\sqrt{v\pi} \Gamma(\frac{v}2)}{(1 + \frac{t^2}v)^-\frac{v+1}2}$
+
+Where:
+
+- $\Gamma$ is the gamma function, which is a generalization of the factorial for real and complex numbers.
+- $\pi$ is the mathematical constant which is approximately 3.1416.
+
+The above formula is quite complicated to work with, so you usually use a table of values or an online calculator[2][3] to find the values of Student's t. These values depend on the level of significance and the degrees of freedom chosen.
+
+### First Load packages and data
+
+
+```{r loadata, message=FALSE}
+library(tidyverse)
+library(patchwork)
+library(gapminder)
+data()
+head(gapminder)
+
+```
+
+```{r}
+str(gapminder)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+lifexMean <- gapminder %>%
+  filter(continent %in% c("Africa", "Europe")) %>%
+                group_by(continent) %>%
+                summarise(mean = mean(lifeExp))
+
+gapminder %>%
+  filter(continent %in% c("Africa", "Europe")) %>%
+  ggplot(aes(lifeExp, fill = continent)) + 
+    geom_density(alpha = 0.4, na.rm = TRUE) +
+    geom_vline(data = lifexMean, aes(xintercept = mean),
+               linetype = "dashed",
+               colour = "red", linewidth = 1) +
+  labs(x = "Life Expectancy",
+       title = "Life Expectancy",
+       subtitle = "Africa vs Europe") +
+  theme(legend.position = "bottom")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
