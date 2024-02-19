@@ -33,6 +33,24 @@ Where:
 
 The above formula is quite complicated to work with, so you usually use a table of values or an online calculator[2][3] to find the values of Student's t. These values depend on the level of significance and the degrees of freedom chosen.
 
+A statistician goes to the doctor and says:
+---
+-- Doctor, I think I have a serious problem. I have hallucinations and see things that aren't there.
+
+--How do you know? - The doctor asks.
+
+-- Well, I did a t-test and rejected the null hypothesis.
+
+-- And what null hypothesis did you raise?
+
+-- That I don't see things that don't exist.
+
+-- So what's the problem?
+
+-- That the significance level was 0.99.
+
+What did you expected? it's a statisticians' joke
+
 ### First Load packages and data
 
 
@@ -49,11 +67,11 @@ head(gapminder)
 str(gapminder)
 ```
 
-## Including Plots
+## Firsts Plots
 
-You can also embed plots, for example:
+Africa versus Europe, for example:
 
-```{r pressure, echo=FALSE}
+```{r ttest1, echo=FALSE}
 lifexMean <- gapminder %>%
   filter(continent %in% c("Africa", "Europe")) %>%
                 group_by(continent) %>%
@@ -72,4 +90,65 @@ gapminder %>%
   theme(legend.position = "bottom")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r ttest2, echo=FALSE}
+gapminder %>%
+  filter(continent %in% c("Africa", "Europe")) %>%
+  t.test(lifeExp ~ continent, data = .,
+         alternative = "two.sided")
+```
+
+```{r ttest3, echo=FALSE}
+lifexMean <- gapminder %>%
+  filter(country %in% c("Ireland", "Switzerland")) %>%
+  group_by(country) %>%
+  summarise(mean = mean(lifeExp))
+
+gapminder %>%
+  filter(country %in% c("Ireland", "Switzerland")) %>%
+  ggplot(aes(lifeExp, fill = country)) + 
+  geom_density(alpha = 0.4, na.rm = TRUE) +
+  geom_vline(data = lifexMean, aes(xintercept = mean),
+             linetype = "dashed",
+             colour = "red", linewidth = 1) +
+  labs(x = "Life Expectancy",
+       title = "Life Expectancy",
+       subtitle = "Ireland vs Switzerland") +
+  theme(legend.position = "bottom")
+```
+
+```{r ttest4, echo=FALSE}
+gapminder %>%
+  filter(country %in% c("Ireland", "Switzerland")) %>%
+  t.test(lifeExp ~ country, data = .,
+         alternative = "less",
+         conf.level = 0.95)
+```
+
+
+```{r ttestgraph5, echo=FALSE}
+lifexMean <- gapminder %>%
+  filter(year %in% c(1957, 2007) & continent == "Africa") %>%
+  group_by(year) %>%
+  summarise(mean = mean(lifeExp))
+
+gapminder %>%
+  filter(year %in% c(1957, 2007) & continent == "Africa") %>%
+  mutate(year = factor(year, levels = c(2007, 1957))) %>%
+  ggplot(aes(lifeExp, fill = year)) + 
+  geom_density(alpha = 0.4, na.rm = TRUE) +
+  geom_vline(data = lifexMean, aes(xintercept = mean),
+             linetype = "dashed",
+             colour = "red", linewidth = 1) +
+  labs(x = "Life Expectancy",
+       title = "Change in life expectancy in Africa",
+       subtitle = "Year 1957 vs Year 2007") +
+  theme(legend.position = "bottom")
+```
+
+
+```{r ttest5, echo=FALSE}
+gapminder %>%
+  filter(year %in% c(1957, 2007) & continent == "Africa") %>%
+  #mutate(year = factor(year, levels = c(2007, 1957))) %>%
+  t.test(lifeExp ~ year, data = ., paired = TRUE)
+```

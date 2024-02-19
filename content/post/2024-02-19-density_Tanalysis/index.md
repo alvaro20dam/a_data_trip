@@ -33,6 +33,24 @@ Where:
 
 The above formula is quite complicated to work with, so you usually use a table of values or an online calculator[2][3] to find the values of Student's t. These values depend on the level of significance and the degrees of freedom chosen.
 
+A statistician goes to the doctor and says:
+---
+-- Doctor, I think I have a serious problem. I have hallucinations and see things that aren't there.
+
+--How do you know? - The doctor asks.
+
+-- Well, I did a t-test and rejected the null hypothesis.
+
+-- And what null hypothesis did you raise?
+
+-- That I don't see things that don't exist.
+
+-- So what's the problem?
+
+-- That the significance level was 0.99.
+
+What did you expected? it's a statisticians' joke
+
 ### First Load packages and data
 
 
@@ -72,10 +90,59 @@ str(gapminder)
 ##  $ gdpPercap: num [1:1704] 779 821 853 836 740 ...
 ```
 
-## Including Plots
+## Firsts Plots
 
-You can also embed plots, for example:
+Africa versus Europe, for example:
 
-<img src="{{< blogdown/postref >}}index_files/figure-html/pressure-1.png" width="672" />
+<img src="{{< blogdown/postref >}}index_files/figure-html/ttest1-1.png" width="672" />
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  lifeExp by continent
+## t = -49.551, df = 981.2, p-value < 2.2e-16
+## alternative hypothesis: true difference in means between group Africa and group Europe is not equal to 0
+## 95 percent confidence interval:
+##  -23.95076 -22.12595
+## sample estimates:
+## mean in group Africa mean in group Europe 
+##             48.86533             71.90369
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/ttest3-1.png" width="672" />
+
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  lifeExp by country
+## t = -1.6337, df = 21.77, p-value = 0.05835
+## alternative hypothesis: true difference in means between group Ireland and group Switzerland is less than 0
+## 95 percent confidence interval:
+##       -Inf 0.1313697
+## sample estimates:
+##     mean in group Ireland mean in group Switzerland 
+##                  73.01725                  75.56508
+```
+
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/ttestgraph5-1.png" width="672" />
+
+
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  lifeExp by year
+## t = -11.381, df = 51, p-value = 1.308e-15
+## alternative hypothesis: true mean difference is not equal to 0
+## 95 percent confidence interval:
+##  -15.92814 -11.15125
+## sample estimates:
+## mean difference 
+##       -13.53969
+```
