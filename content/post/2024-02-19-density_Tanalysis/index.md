@@ -49,7 +49,7 @@ A statistician goes to the doctor and says:
 
 -- That the significance level was 0.99.
 
-What did you expected? it's a statisticians' joke
+What did you expect? it's a statisticians' joke
 
 ### First Load packages and data
 
@@ -138,11 +138,11 @@ Africa versus Europe, for example:
 ## 	Paired t-test
 ## 
 ## data:  lifeExp by year
-## t = -11.381, df = 51, p-value = 1.308e-15
+## t = 11.381, df = 51, p-value = 1.308e-15
 ## alternative hypothesis: true mean difference is not equal to 0
 ## 95 percent confidence interval:
-##  -15.92814 -11.15125
+##  11.15125 15.92814
 ## sample estimates:
 ## mean difference 
-##       -13.53969
+##        13.53969
 ```

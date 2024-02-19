@@ -49,7 +49,7 @@ A statistician goes to the doctor and says:
 
 -- That the significance level was 0.99.
 
-What did you expected? it's a statisticians' joke
+What did you expect? it's a statisticians' joke
 
 ### First Load packages and data
 
@@ -149,6 +149,6 @@ gapminder %>%
 ```{r ttest5, echo=FALSE}
 gapminder %>%
   filter(year %in% c(1957, 2007) & continent == "Africa") %>%
-  #mutate(year = factor(year, levels = c(2007, 1957))) %>%
+  mutate(year = factor(year, levels = c(2007, 1957))) %>%
   t.test(lifeExp ~ year, data = ., paired = TRUE)
 ```
